@@ -98,27 +98,24 @@ class Shop extends Writable<Bread> {
 }
 
 
-test('Can stream', function(tst) {
+test.cb('Can stream', function(tst) {
 
     let stock: Bread[] = [];
-    let farm = new Farm({highWaterMark: 1});
-    let bakery = new Bakery({highWaterMark: 1});
-    let shop = new Shop({highWaterMark: 1}, stock);
+    let farm = new Farm({});
+    let bakery = new Bakery({});
+    let shop = new Shop({}, stock);
 
     let supplyChain = farm.pipe(bakery).pipe(shop);
 
     // Uncomment below for type error!
     // let badSupplyChain: Writable<Bread> = farm.pipe(shop);
 
-    return new Promise((resolve) => {
-        supplyChain.on('finish', () => {
-            tst.is(stock.length, 3, `There should be three loves was (${stock.length})`);
-            tst.is(stock[0].size, Size.Large, `The first item of bread should have been large (${stock[0].size})`);
-            tst.is(stock[1].size, Size.Large, `The first item of bread should have been large (${stock[1].size})`);
-            tst.is(stock[2].size, Size.Medium, `The first item of bread should have been medium (${stock[2].size})`);
-            resolve(true);
-            tst.pass();
-        });
+    supplyChain.on('finish', () => {
+        tst.is(stock.length, 3, `There should be three loves was (${stock.length})`);
+        tst.is(stock[0].size, Size.Large, `The first item of bread should have been large (${stock[0].size})`);
+        tst.is(stock[1].size, Size.Large, `The first item of bread should have been large (${stock[1].size})`);
+        tst.is(stock[2].size, Size.Medium, `The first item of bread should have been medium (${stock[2].size})`);
+        tst.end();
     });
 
 });
