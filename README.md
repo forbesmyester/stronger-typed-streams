@@ -106,3 +106,5 @@ If you tried to attach a Farm directly to a Shop the TypeScript compiler would t
     TS2345: Argument of type 'Shop' is not assignable to parameter of type 'Writable<Flour>'.
 
 Which is absolutely correct and allows you to catch errors at compile time instead of runtime, perhaps in the wild.
+
+There is also a Duplex implementation, but this is only tested in Node versions >= 8.

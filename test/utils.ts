@@ -1,4 +1,4 @@
-import { Readable, Writable, Transform } from '../src/utils';
+import { Duplex, Readable, Writable, Transform } from '../src/utils';
 import test from 'ava';
 
 class Flour {
@@ -80,7 +80,7 @@ class Bakery extends Transform<Flour, Bread> {
 
 }
 
-class Shop extends Writable<Bread> {
+class Person extends Writable<Bread> {
 
     out: Bread[] = [];
 
@@ -97,18 +97,70 @@ class Shop extends Writable<Bread> {
     }
 }
 
+class Proxy<T> extends Duplex<T, T> {
+
+    private store: T[] = [];
+    private outstanding: number = 0;
+
+    constructor(opts = {}) {
+        super(Object.assign({objectMode: true}, opts));
+    }
+
+    _write(bread: T, encoding, cb) {
+        process.nextTick(() => {
+            this.store.push(bread);
+            while (this.outstanding && this.store.length) {
+                this.outstanding--;
+                this.push(<T>this.store.shift());
+            }
+            cb();
+        });
+    }
+
+    _final(cb) {
+        this.push(null);
+    }
+
+    _read(size) {
+        process.nextTick(() => {
+            while (size--) {
+                if (this.store.length) {
+                    this.push(<T>this.store.shift());
+                }
+                else {
+                    this.outstanding = size + 1;
+                    return;
+                }
+            }
+        });
+    }
+}
+
+class Shop extends Proxy<Bread> {
+}
+
+function getNodeMajorVersion() {
+    return parseInt(process.version.slice(1).replace(/\..*/, ''), 10);
+}
 
 test.cb('Can stream', function(tst) {
 
     let stock: Bread[] = [];
     let farm = new Farm({});
     let bakery = new Bakery({});
-    let shop = new Shop({}, stock);
+    let shop = new Shop({});
+    let person = new Person({}, stock);
 
-    let supplyChain = farm.pipe(bakery).pipe(shop);
+    let supplyChain;
+    if (getNodeMajorVersion() < 8) { // I used _final in Shop/Proxy<T> which is
+                                     // only available in Node 8+
+        supplyChain = farm.pipe(bakery).pipe(person);
+    } else {
+        supplyChain = farm.pipe(bakery).pipe(shop).pipe(person);
+    }
 
     // Uncomment below for type error!
-    // let badSupplyChain: Writable<Bread> = farm.pipe(shop);
+    // let badSupplyChain: Writable<Bread> = farm.pipe(person);
 
     supplyChain.on('finish', () => {
         tst.is(stock.length, 3, `There should be three loves was (${stock.length})`);
