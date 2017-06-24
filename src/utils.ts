@@ -6,7 +6,7 @@ export abstract class Readable<Out> extends NodeStream.Readable {
         super(opts);
     }
 
-    abstract _read();
+    abstract _read(size: number);
 
     push(chunk: Out|null, encoding?: string): boolean {
         return super.push(chunk, encoding);

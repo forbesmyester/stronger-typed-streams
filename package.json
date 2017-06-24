@@ -1,6 +1,6 @@
 {
   "name": "stronger-typed-streams",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "NodeJS Streams, but with stronger types",
   "typings": "./dist/src/utils.d.ts",
   "private": false,

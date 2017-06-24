@@ -41,7 +41,7 @@ class Farm extends Readable<Flour> {
         super(Object.assign({objectMode: true}, opts));
     }
 
-    _read() {
+    _read(size) {
         let v = this.i++ < 8 ? new Flour(1) : null;
         process.nextTick(() => {
             this.push(v);

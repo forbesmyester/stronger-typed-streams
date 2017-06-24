@@ -2,7 +2,7 @@
 import * as NodeStream from 'stream';
 export declare abstract class Readable<Out> extends NodeStream.Readable {
     constructor(opts?: {});
-    abstract _read(): any;
+    abstract _read(size: number): any;
     push(chunk: Out | null, encoding?: string): boolean;
     pipe<NextDuplexOut>(destination: Duplex<Out, NextDuplexOut>, options?: {
         end?: boolean;

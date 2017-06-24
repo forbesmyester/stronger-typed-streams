@@ -107,4 +107,4 @@ If you tried to attach a Farm directly to a Shop the TypeScript compiler would t
 
 Which is absolutely correct and allows you to catch errors at compile time instead of runtime, perhaps in the wild.
 
-There is also a Duplex implementation, but this is only tested in Node versions >= 8.
+There is also a Duplex implementation, but this is only tested in Node versions >= 8 because in the tests I an API method that is only available in Node 8+.
