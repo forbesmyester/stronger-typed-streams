@@ -9,7 +9,7 @@ class Flour {
     }
 }
 
-enum Size { OnlyPackaging, Small, Medium, Large };
+enum Size { OnlyPackaging, Small, Medium, Large }
 
 class Bread {
 

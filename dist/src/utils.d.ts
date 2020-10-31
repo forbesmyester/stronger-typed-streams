@@ -3,7 +3,7 @@ import * as NodeStream from 'stream';
 export declare abstract class Readable<Out> extends NodeStream.Readable {
     constructor(opts?: {});
     abstract _read(size: number): any;
-    push(chunk: Out | null, encoding?: string): boolean;
+    push(chunk: Out | null, encoding?: BufferEncoding): boolean;
     pipe<NextDuplexOut>(destination: Duplex<Out, NextDuplexOut>, options?: {
         end?: boolean;
     }): Duplex<Out, NextDuplexOut>;
@@ -16,7 +16,7 @@ export declare abstract class Readable<Out> extends NodeStream.Readable {
 }
 export declare abstract class Duplex<In, Out> extends NodeStream.Duplex {
     constructor(opts?: {});
-    push(chunk: Out | null, encoding?: string): boolean;
+    push(chunk: Out | null, encoding?: BufferEncoding): boolean;
     pipe<NextDuplexOut>(destination: Duplex<Out, NextDuplexOut>, options?: {
         end?: boolean;
     }): Duplex<Out, NextDuplexOut>;
@@ -27,9 +27,9 @@ export declare abstract class Duplex<In, Out> extends NodeStream.Duplex {
         end?: boolean;
     }): Writable<Out>;
 }
-export declare abstract class Transform<In, Out> extends NodeStream.Transform {
+export declare class Transform<In, Out> extends NodeStream.Transform {
     constructor(opts?: {});
-    push(chunk: Out | null, encoding?: string): boolean;
+    push(chunk: Out | null, encoding?: BufferEncoding): boolean;
     pipe<NextDuplexOut>(destination: Duplex<Out, NextDuplexOut>, options?: {
         end?: boolean;
     }): Duplex<Out, NextDuplexOut>;
@@ -42,5 +42,5 @@ export declare abstract class Transform<In, Out> extends NodeStream.Transform {
 }
 export declare abstract class Writable<In> extends NodeStream.Writable {
     constructor(opts?: {});
-    abstract _write(chunk: In, encoding: string, callback: Function): void;
+    abstract _write(chunk: In, encoding: BufferEncoding, callback: Function): void;
 }

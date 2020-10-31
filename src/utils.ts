@@ -8,7 +8,7 @@ export abstract class Readable<Out> extends NodeStream.Readable {
 
     abstract _read(size: number);
 
-    push(chunk: Out|null, encoding?: string): boolean {
+    push(chunk: Out|null, encoding?: BufferEncoding): boolean {
         return super.push(chunk, encoding);
     }
 
@@ -26,7 +26,7 @@ export abstract class Duplex<In, Out> extends NodeStream.Duplex {
         super(opts);
     }
 
-    push(chunk: Out|null, encoding?: string): boolean {
+    push(chunk: Out|null, encoding?: BufferEncoding): boolean {
         return super.push(chunk, encoding);
     }
 
@@ -38,13 +38,13 @@ export abstract class Duplex<In, Out> extends NodeStream.Duplex {
     }
 }
 
-export abstract class Transform<In, Out> extends NodeStream.Transform {
+export class Transform<In, Out> extends NodeStream.Transform {
 
     constructor(opts = {}) {
         super(opts);
     }
 
-    push(chunk: Out|null, encoding?: string): boolean {
+    push(chunk: Out|null, encoding?: BufferEncoding): boolean {
         return super.push(chunk, encoding);
     }
 
@@ -62,5 +62,5 @@ export abstract class Writable<In> extends NodeStream.Writable {
         super(opts);
     }
 
-    abstract _write(chunk: In, encoding: string, callback: Function): void;
+    abstract _write(chunk: In, encoding: BufferEncoding, callback: Function): void;
 }
